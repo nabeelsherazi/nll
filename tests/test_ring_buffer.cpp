@@ -13,8 +13,8 @@ TEST(RingBufferTest, EmptyBufferIsEmpty) {
 
 TEST(RingBufferTest, PeekOrPopFromEmptyBufferThrows) {
   nll::RingBuffer<int, 16> queue;
-  EXPECT_THROW(queue.Peek(), std::runtime_error);
-  EXPECT_THROW(queue.Pop(), std::runtime_error);
+  EXPECT_THROW(queue.Peek(), std::out_of_range);
+  EXPECT_THROW(queue.Pop(), std::out_of_range);
 }
 
 TEST(RingBufferTest, CanPushElement) {

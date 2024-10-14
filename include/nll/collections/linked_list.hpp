@@ -16,12 +16,12 @@ class SinglyLinkedList {
   struct ListNode {
     T value;
     ListNode* next;
-    ListNode(T value) : value(value), next(nullptr) {};
+    explicit ListNode(T value) : value(value), next(nullptr) {};
   };
 
-  ListNode* head;
+  ListNode* head_;
 
-  std::size_t size;
+  std::size_t size_;
 
  public:
   /// @brief Iterator type for class
@@ -32,14 +32,14 @@ class SinglyLinkedList {
     using pointer = T*;
     using reference = T&;
 
-    Iterator(ListNode* ptr) : ptr(ptr) {};
+    explicit Iterator(ListNode* ptr) : ptr(ptr) {};
 
-    reference operator*() const { return this->ptr->value; };
+    reference operator*() const { return ptr->value; };
 
-    pointer operator->() { return this->ptr.value; };
+    pointer operator->() { return &(ptr->value); };
 
     Iterator& operator++() {
-      this->ptr = this->ptr->next;
+      ptr = ptr->next;
       return *this;
     };
 
@@ -60,35 +60,34 @@ class SinglyLinkedList {
     ListNode* ptr;
   };
 
-  SinglyLinkedList() : head(nullptr), size(0) {};
+  SinglyLinkedList() : head_(nullptr) {};
 
   ~SinglyLinkedList() {
-    while (this->head != nullptr) {
-      auto oldHead = this->head;
-      this->head = oldHead->next;
-      delete oldHead;
+    while (head_) {
+      auto old_head = head_;
+      head_ = old_head->next;
+      delete old_head;
     }
   }
 
-  Iterator begin() { return Iterator(this->head); };
+  Iterator begin() { return Iterator(head_); };
 
   Iterator end() { return Iterator(nullptr); }
 
-  /// @brief Gets the current size of the list
+  /// @brief Gets the current size_ of the list
   /// @return The current number of items in the list
-  std::size_t Size() { return this->size; }
+  std::size_t Size() { return size_; }
 
   T& operator[](int index) {
-    if (index >= this->Size()) {
-      throw std::logic_error(
-          fmt::format("index {} is out of bounds for list of size {}", index,
-                      this->Size()));
+    if (index >= Size()) {
+      throw std::out_of_range(fmt::format(
+          "index {} is out of bounds for list of size_ {}", index, Size()));
     }
     if (index < 0) {
-      throw std::logic_error(
+      throw std::out_of_range(
           fmt::format("negative index {} is not allowed!", index));
     }
-    auto currentNode = this->head;
+    auto currentNode = head_;
     for (auto i = 0; i < index; i++) {
       currentNode = currentNode->next;
     }
@@ -99,31 +98,48 @@ class SinglyLinkedList {
   /// @param value the value to push
   void PushFront(T value) {
     ListNode* newNode = new ListNode(value);
-    if (newNode) {
-      newNode->next = head;
-      this->head = newNode;
-      this->size++;
-    }
+    newNode->next = head_;
+    head_ = newNode;
+    size_++;
   }
 
-  /// @brief Get the value at
-  /// @return
+  /// @brief Returns the front element of the list without removing it.
+  /// @returns the value at the front.
+  /// @throws std::out_of_range if the list is empty.
   T PeekFront() {
-    if (this->head) {
-      return this->head->value;
+    if (head_) {
+      return head_->value;
     }
-    throw std::runtime_error("list is empty!");
+    throw std::out_of_range("list is empty!");
   }
 
+  /// @brief Removes and returns the front element of the list.
+  /// @returns the value at the front.
+  /// @throws std::out_of_range if the list is empty.
   T PopFront() {
-    if (this->head) {
-      auto oldHead = this->head;
-      auto val = oldHead->value;
-      this->head = this->head->next;
-      delete oldHead;
+    if (head_) {
+      auto old_head = head_;
+      auto val = old_head->value;
+      head_ = head_->next;
+      delete old_head;
       return val;
     }
-    throw std::runtime_error("list is empty!");
+    throw std::out_of_range("list is empty!");
+  }
+
+  /// @brief Push a value to the back of the linked list. O(n) operation.
+  /// @param value the value to push
+  void PushBack(T value) {
+    auto newNode = new ListNode(value);
+    if (!head_) {
+      head_ = newNode;
+      return;
+    }
+    auto currentNode = head_;
+    while (currentNode->next) {
+      currentNode = currentNode->next;
+    }
+    currentNode->next = newNode;
   }
 };
 }  // namespace nll

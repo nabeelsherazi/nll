@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <string>
 
 #include <gtest/gtest.h>
 
@@ -40,14 +41,25 @@ TEST(SinglyLinkedListTest, Removal) {
   EXPECT_EQ(list.PopFront(), 1);
 }
 
+TEST(SinglyLinkedListTest, PushBackStoresValues) {
+  auto list = nll::SinglyLinkedList<int>();
+  list.PushBack(1);
+  list.PushBack(2);
+  list.PushBack(3);
+  // Expect value stored successfully
+  EXPECT_EQ(list.PopFront(), 1);
+  EXPECT_EQ(list.PopFront(), 2);
+  EXPECT_EQ(list.PopFront(), 3);
+}
+
 TEST(SinglyLinkedListTest, ThrowsIfPopWhileEmpty) {
   auto list = nll::SinglyLinkedList<int>();
-  EXPECT_THROW(list.PopFront(), std::runtime_error);
+  EXPECT_THROW(list.PopFront(), std::out_of_range);
 }
 
 TEST(SinglyLinkedListTest, ThrowsIfPeekWhileEmpty) {
   auto list = nll::SinglyLinkedList<int>();
-  EXPECT_THROW(list.PeekFront(), std::runtime_error);
+  EXPECT_THROW(list.PeekFront(), std::out_of_range);
 }
 
 TEST(SinglyLinkedListTest, IsIterable) {
@@ -87,4 +99,19 @@ TEST(SinglyLinkedListTest, CanIndex) {
   list.PushFront(3);
 
   EXPECT_EQ(list[1], 2);
+}
+
+/*
+Tests operator* and operator-> on the iterator class.
+*/
+TEST(SinglyLinkedListTest, CanAccessValueThroughIterator) {
+  auto list = nll::SinglyLinkedList<std::string>();
+  std::string s1("hello");
+  std::string s2("friend");
+  list.PushFront(s1);
+  list.PushFront(s2);
+  auto it = list.begin();
+  EXPECT_EQ((*it).length(), 6);
+  it++;
+  EXPECT_EQ(it->length(), 5);
 }
