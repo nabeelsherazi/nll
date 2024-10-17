@@ -51,8 +51,6 @@ class RingBuffer {
     }
     return (buffer_size_ - start_) + end_;
   }
-
-  void heh___ehhe() { ; }
 };
 
 }  // namespace nll

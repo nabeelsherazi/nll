@@ -20,6 +20,7 @@ add_executable(
   nll_tests
   test_linked_list.cpp
   test_ring_buffer.cpp
+  test_binary_tree.cpp
 )
 target_link_libraries(
   nll_tests

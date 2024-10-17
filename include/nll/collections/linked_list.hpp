@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <iterator>
 #include <stdexcept>
+#include <utility>
 
 #include <fmt/core.h>
 
@@ -16,12 +17,15 @@ class SinglyLinkedList {
   struct ListNode {
     T value;
     ListNode* next;
-    explicit ListNode(T value) : value(value), next(nullptr) {};
+
+    template <class U>
+    explicit ListNode(U&& value)
+        : value(std::forward<U>(value)), next(nullptr){};
   };
 
-  ListNode* head_;
+  ListNode* head_ = nullptr;
 
-  std::size_t size_;
+  std::size_t size_ = 0;
 
  public:
   /// @brief Iterator type for class
@@ -57,18 +61,10 @@ class SinglyLinkedList {
     };
 
    private:
-    ListNode* ptr;
+    ListNode* ptr = nullptr;
   };
 
-  SinglyLinkedList() : head_(nullptr) {};
-
-  ~SinglyLinkedList() {
-    while (head_) {
-      auto old_head = head_;
-      head_ = old_head->next;
-      delete old_head;
-    }
-  }
+  ~SinglyLinkedList() { Clear(); }
 
   Iterator begin() { return Iterator(head_); };
 
@@ -78,6 +74,23 @@ class SinglyLinkedList {
   /// @return The current number of items in the list
   std::size_t Size() { return size_; }
 
+  /// @brief Returns whether the list is empty or not
+  /// @return true if the list if empty
+  bool Empty() { return Size() == 0; }
+
+  /// @brief Deletes all elements from the list
+  void Clear() {
+    while (head_) {
+      auto old_head = head_;
+      head_ = old_head->next;
+      delete old_head;
+    }
+  }
+
+  /// @brief Index operator
+  /// @param index
+  /// @return item at given index
+  /// @throws std::out_of_range if index is negative or >= size
   T& operator[](int index) {
     if (index >= Size()) {
       throw std::out_of_range(fmt::format(
@@ -96,8 +109,9 @@ class SinglyLinkedList {
 
   /// @brief Push a value to the front of the list (index 0). O(1) operation
   /// @param value the value to push
-  void PushFront(T value) {
-    ListNode* newNode = new ListNode(value);
+  template <class U>
+  void PushFront(U&& value) {
+    ListNode* newNode = new ListNode(std::forward<U>(value));
     newNode->next = head_;
     head_ = newNode;
     size_++;
@@ -106,7 +120,7 @@ class SinglyLinkedList {
   /// @brief Returns the front element of the list without removing it.
   /// @returns the value at the front.
   /// @throws std::out_of_range if the list is empty.
-  T PeekFront() {
+  T& PeekFront() {
     if (head_) {
       return head_->value;
     }
@@ -129,8 +143,10 @@ class SinglyLinkedList {
 
   /// @brief Push a value to the back of the linked list. O(n) operation.
   /// @param value the value to push
-  void PushBack(T value) {
-    auto newNode = new ListNode(value);
+  template <class U>
+  void PushBack(U&& value) {
+    auto newNode = new ListNode(std::forward<U>(value));
+    size_++;
     if (!head_) {
       head_ = newNode;
       return;
@@ -141,5 +157,32 @@ class SinglyLinkedList {
     }
     currentNode->next = newNode;
   }
+
+  void Remove(T item) {
+    if (!head_) {
+      throw std::out_of_range("list is empty!");
+    }
+    ListNode* lastNode = head_;
+    // Case remove head
+    if (head_->value == item) {
+      head_ = head_->next;
+      delete lastNode;
+      size_--;
+      return;
+    }
+    // Case somewhere between
+    ListNode* currentNode = head_->next;
+    while (currentNode) {
+      if (currentNode->value == item) {
+        lastNode->next = currentNode->next;
+        delete currentNode;
+        size_--;
+        return;
+      }
+      lastNode = currentNode;
+      currentNode = currentNode->next;
+    }
+    throw std::out_of_range("item was not found in list!");
+  };
 };
 }  // namespace nll
