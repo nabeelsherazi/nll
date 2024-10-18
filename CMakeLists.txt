@@ -16,3 +16,4 @@ target_compile_options(nll_lib INTERFACE -fsanitize=address)
 target_link_options(nll_lib INTERFACE -fsanitize=address)
 
 add_subdirectory(tests)
+add_subdirectory(bench)
