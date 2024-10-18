@@ -9,22 +9,38 @@
 
 class BaseSinglyLinkedListTest : public testing::Test {
  protected:
- nll::SinglyLinkedList<int> list;
+  nll::SinglyLinkedList<int> list;
 };
 
 class PrefilledSinglyLinkedListTest : public testing::Test {
  protected:
   PrefilledSinglyLinkedListTest() {
-    for (int i = 1; i < 4 ; i++) {
+    for (int i = 1; i < 4; i++) {
       list.PushFront(i);
     }
   }
 
   nll::SinglyLinkedList<int> list;
-
 };
 
-TEST_F(BaseSinglyLinkedListTest, CanInsert) {
+TEST(SinglyLinkedListTest, CanConstruct) {
+  nll::SinglyLinkedList<int> list;
+}
+
+TEST_F(BaseSinglyLinkedListTest, CanPushAndPopBack) {
+  // Push rvalue
+  list.PushBack(1);
+  // Push lvalue
+  int x = 2;
+  list.PushBack(x);
+  // Ensure lvalue is copied
+  x = 3;
+  // Expect values stored successfully
+  EXPECT_EQ(list.PopBack(), 2);
+  EXPECT_EQ(list.PopBack(), 1);
+}
+
+TEST_F(BaseSinglyLinkedListTest, CanPushAndPopFront) {
   // Push rvalue
   list.PushFront(1);
   // Push lvalue
@@ -37,12 +53,61 @@ TEST_F(BaseSinglyLinkedListTest, CanInsert) {
   EXPECT_EQ(list.PopFront(), 1);
 }
 
-TEST_F(BaseSinglyLinkedListTest, SizeIsCorrect) {
-  for (int i = 0; i < 3; i++) {
+TEST_F(BaseSinglyLinkedListTest, CanMixPushAndPopFrontAndBack) {
+  list.PushFront(1);
+  list.PushBack(2);
+  list.PushFront(3);
+  list.PushBack(4);
+  // Expect values stored successfully
+  EXPECT_EQ(list.PopBack(), 4);
+  EXPECT_EQ(list.PopFront(), 3);
+  EXPECT_EQ(list.PopBack(), 2);
+  EXPECT_EQ(list.PopFront(), 1);
+}
+
+TEST_F(BaseSinglyLinkedListTest, SizeIsCorrectPushingFront) {
+  for (int i = 0; i < 8; i++) {
     list.PushFront(i);
+  }
+  EXPECT_EQ(list.Size(), 8);
+}
+
+TEST_F(BaseSinglyLinkedListTest, SizeIsCorrectPushingBack) {
+  for (int i = 0; i < 8; i++) {
     list.PushBack(i);
   }
-  EXPECT_EQ(list.Size(), 6);
+  EXPECT_EQ(list.Size(), 8);
+}
+
+TEST_F(BaseSinglyLinkedListTest, SizeIsCorrectPushingAndPoppingFront) {
+  for (int i = 0; i < 8; i++) {
+    list.PushFront(i);
+  }
+  for (int i = 0; i < 8; i++) {
+    list.PopFront();
+  }
+  EXPECT_EQ(list.Size(), 0);
+}
+
+TEST_F(BaseSinglyLinkedListTest, SizeIsCorrectPushingAndPoppingBack) {
+  for (int i = 0; i < 8; i++) {
+    list.PushBack(i);
+  }
+  for (int i = 0; i < 8; i++) {
+    list.PopBack();
+  }
+  EXPECT_EQ(list.Size(), 0);
+}
+
+TEST_F(BaseSinglyLinkedListTest,
+       SizeIsCorrectMixedPushingAndPoppingFrontAndBack) {
+  for (int i = 0; i < 8; i++) {
+    list.PushFront(i);
+    list.PushBack(i);
+    list.PopBack();
+    list.PopFront();
+  }
+  EXPECT_EQ(list.Size(), 0);
 }
 
 TEST_F(BaseSinglyLinkedListTest, CanPopFront) {
@@ -93,7 +158,6 @@ TEST_F(BaseSinglyLinkedListTest, SearchingEmptyListIsSane) {
 TEST_F(PrefilledSinglyLinkedListTest, CanIndex) {
   EXPECT_EQ(list[1], 2);
 }
-
 
 TEST(MiscSinglyLinkedListTest, CanAccessValueThroughIterator) {
   auto list = nll::SinglyLinkedList<std::string>();

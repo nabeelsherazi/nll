@@ -66,9 +66,13 @@ class SinglyLinkedList {
 
   ~SinglyLinkedList() { Clear(); }
 
-  Iterator begin() { return Iterator(head_); };
+  Iterator begin() { return Iterator(head_); }
 
   Iterator end() { return Iterator(nullptr); }
+
+  const Iterator cbegin() { return Iterator(head_); }
+
+  const Iterator cend() { return Iterator(nullptr); }
 
   /// @brief Gets the current size_ of the list
   /// @return The current number of items in the list
@@ -136,6 +140,35 @@ class SinglyLinkedList {
       auto val = old_head->value;
       head_ = head_->next;
       delete old_head;
+      size_--;
+      return val;
+    }
+    throw std::out_of_range("list is empty!");
+  }
+
+  /// @brief Removes and returns the back element of the list.
+  /// @returns the value at the back.
+  /// @throws std::out_of_range if the list is empty.
+  T PopBack() {
+    if (head_) {
+      // Case head is the only node
+      if (!head_->next) {
+        auto val = head_->value;
+        delete head_;
+        size_--;
+        head_ = nullptr;
+        return val;
+      }
+      auto lastNode = head_;
+      auto currentNode = head_->next;
+      while (currentNode->next) {
+        lastNode = currentNode;
+        currentNode = currentNode->next;
+      }
+      auto val = currentNode->value;
+      lastNode->next = nullptr;
+      delete currentNode;
+      size_--;
       return val;
     }
     throw std::out_of_range("list is empty!");
