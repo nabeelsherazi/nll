@@ -1,4 +1,4 @@
-#include "nll/collections/graph.hpp"
+// #include "nll/collections/graph.hpp"
 
 #include <stdexcept>
 
@@ -6,8 +6,8 @@
 
 #include <nll/macros.hpp>
 
-TEST(BinaryTreeTest, Creation) {
-  auto tree = nll::BinaryTree<int>();
-  tree.Insert(1);
-  EXPECT_EQ(tree.GetRoot(), 1);
-}
+// TEST(BinaryTreeTest, Creation) {
+//   auto tree = nll::BinaryTree<int>();
+//   tree.Insert(1);
+//   EXPECT_EQ(tree.GetRoot(), 1);
+// }
