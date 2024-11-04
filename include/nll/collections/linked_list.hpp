@@ -134,7 +134,7 @@ class SinglyLinkedList {
     size++;
   }
 
-  /// @brief Returns the front element of the list without removing it.
+  /// @brief Returns the front element of the list without removing it. O(1) operation.
   /// @returns the value at the front.
   /// @throws std::out_of_range if the list is empty.
   T& PeekFront() {
@@ -144,7 +144,7 @@ class SinglyLinkedList {
     throw std::out_of_range("list is empty!");
   }
 
-  /// @brief Returns the back element of the list without removing it.
+  /// @brief Returns the back element of the list without removing it. O(1) operation.
   /// @returns the value at the back.
   /// @throws std::out_of_range if the list is empty.
   T& PeekBack() {
@@ -154,7 +154,7 @@ class SinglyLinkedList {
     throw std::out_of_range("list is empty!");
   }
 
-  /// @brief Removes and returns the front element of the list.
+  /// @brief Removes and returns the front element of the list. O(1) operation.
   /// @returns the value at the front.
   /// @throws std::out_of_range if the list is empty.
   T PopFront() {
@@ -172,7 +172,7 @@ class SinglyLinkedList {
     throw std::out_of_range("list is empty!");
   }
 
-  /// @brief Removes and returns the back element of the list.
+  /// @brief Removes and returns the back element of the list. O(N) operation.
   /// @returns the value at the back.
   /// @throws std::out_of_range if the list is empty.
   T PopBack() {
@@ -197,7 +197,7 @@ class SinglyLinkedList {
     throw std::out_of_range("list is empty!");
   }
 
-  /// @brief Push a value to the back of the linked list. O(n) operation.
+  /// @brief Push a value to the back of the linked list. O(1) operation.
   /// @param value the value to push
   template <class U>
   void PushBack(U&& value) {
@@ -210,6 +210,8 @@ class SinglyLinkedList {
     size++;
   }
 
+  /// @brief Remove the first instance of item from the list. O(N) operation.
+  /// @param item the item to remove
   void Remove(T item) {
     if (!head) {
       throw std::out_of_range("list is empty!");
