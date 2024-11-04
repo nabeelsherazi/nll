@@ -1,40 +1,19 @@
 #pragma once
 
+#include <memory>
 #include <stdexcept>
-#include <vector>
+
+#include <fmt/core.h>
 
 namespace nll {
 
 class BinaryTreeNode {
  public:
-  explicit BinaryTreeNode(int value) : value_(value) {};
+  explicit BinaryTreeNode(int value) : value(value) {};
 
-  int value_;
-  BinaryTreeNode* left_ = nullptr;
-  BinaryTreeNode* right_ = nullptr;
-};
-
-class BinaryTree {
- public:
-  ~BinaryTree() { delete root_; }
-
-  void Insert(int value) {
-    if (!root_) {
-      auto newNode = new BinaryTreeNode(value);
-      root_ = newNode;
-    }
-    // To be filled in ...
-  }
-
-  int GetRoot() {
-    if (!root_) {
-      throw std::runtime_error("tree has no nodes!");
-    }
-    return root_->value();
-  }
-
- private:
-  BinaryTreeNode* root_ = nullptr;
+  int value;
+  std::unique_ptr<BinaryTreeNode> left = nullptr;
+  std::unique_ptr<BinaryTreeNode> right = nullptr;
 };
 
 }  // namespace nll

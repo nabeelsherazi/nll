@@ -203,3 +203,14 @@ TEST_F(PrefilledSinglyLinkedListTest, RemovingTailValueSucceeds) {
   list.Remove(1);
   EXPECT_EQ(list.Size(), 2);
 }
+
+TEST_F(PrefilledSinglyLinkedListTest, SizeIsCorrectAfterClear) {
+  list.Clear();
+  EXPECT_EQ(list.Size(), 0);
+}
+
+TEST_F(PrefilledSinglyLinkedListTest, CantPeekOrPopAfterClear) {
+  list.Clear();
+  EXPECT_THROW(list.PeekFront(), std::out_of_range);
+  EXPECT_THROW(list.PopFront(), std::out_of_range);
+}
