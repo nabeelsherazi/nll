@@ -9,47 +9,47 @@ namespace nll {
 template <class T, std::size_t N>
 class RingBuffer {
  private:
-  std::size_t start_;
-  std::size_t end_;
+  std::size_t start;
+  std::size_t end;
 
-  std::array<int, N> buffer_;
+  std::array<int, N> buffer;
 
-  std::size_t buffer_size_ = N;
+  std::size_t buffer_size = N;
 
  public:
   void Push(T i) {
-    buffer_[end_] = i;
-    end_ = (end_ + 1) % buffer_size_;
-    if (end_ == start_) {
-      ++start_;
+    buffer[end] = i;
+    end = (end + 1) % buffer_size;
+    if (end == start) {
+      ++start;
     }
   }
 
   T Pop() {
-    if (start_ == end_) {
+    if (start == end) {
       throw std::out_of_range("ring buffer is empty!");
     }
-    auto pos = start_;
-    start_ = (start_ + 1) % buffer_size_;
-    return buffer_[pos];
+    auto pos = start;
+    start = (start + 1) % buffer_size;
+    return buffer[pos];
   }
 
   T Peek() {
-    if (start_ == end_) {
+    if (start == end) {
       throw std::out_of_range("ring buffer is empty!");
     }
-    return buffer_[start_];
+    return buffer[start];
   }
 
-  bool Empty() { return start_ == end_; };
+  bool Empty() { return start == end; };
 
-  void Clear() { start_ = end_ = 0; }
+  void Clear() { start = end = 0; }
 
   std::size_t Size() {
-    if (end_ >= start_) {
-      return end_ - start_;
+    if (end >= start) {
+      return end - start;
     }
-    return (buffer_size_ - start_) + end_;
+    return (buffer_size - start) + end;
   }
 };
 
