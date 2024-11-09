@@ -18,9 +18,11 @@ enable_testing()
 
 add_executable(
   nll_tests
-  test_linked_list.cpp
-  test_ring_buffer.cpp
-  test_binary_tree.cpp
+  collections/test_linked_list.cpp
+  collections/test_ring_buffer.cpp
+  collections/test_hashmap.cpp
+  collections/test_set.cpp
+  graph/test_binary_tree.cpp
 )
 target_link_libraries(
   nll_tests

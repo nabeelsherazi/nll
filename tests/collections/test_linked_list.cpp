@@ -214,3 +214,8 @@ TEST_F(PrefilledSinglyLinkedListTest, CantPeekOrPopAfterClear) {
   EXPECT_THROW(list.PeekFront(), std::out_of_range);
   EXPECT_THROW(list.PopFront(), std::out_of_range);
 }
+
+TEST(MiscSinglyLinkedListTest, WorksWithFreakyTypes) {
+  auto list = nll::SinglyLinkedList<std::pair<std::string, std::string>>();
+  list.PushBack(std::make_pair("Hello", "World"));
+}
