@@ -134,7 +134,8 @@ class SinglyLinkedList {
     size++;
   }
 
-  /// @brief Returns the front element of the list without removing it. O(1) operation.
+  /// @brief Returns the front element of the list without removing it. O(1)
+  /// operation.
   /// @returns the value at the front.
   /// @throws std::out_of_range if the list is empty.
   T& PeekFront() {
@@ -144,7 +145,8 @@ class SinglyLinkedList {
     throw std::out_of_range("list is empty!");
   }
 
-  /// @brief Returns the back element of the list without removing it. O(1) operation.
+  /// @brief Returns the back element of the list without removing it. O(1)
+  /// operation.
   /// @returns the value at the back.
   /// @throws std::out_of_range if the list is empty.
   T& PeekBack() {
@@ -208,6 +210,32 @@ class SinglyLinkedList {
     tail->next = newNode;
     tail = newNode;
     size++;
+  }
+
+  void Erase(Iterator it) {
+    if (!head) {
+      throw std::out_of_range("list is empty!");
+    }
+    if (it.ptr == head) {
+      PopFront();
+      return;
+    }
+    ListNode* lastNode = head;
+    ListNode* currentNode = head->next;
+    while (currentNode) {
+      if (currentNode == it.ptr) {
+        lastNode->next = currentNode->next;
+        if (currentNode == tail) {
+          tail = lastNode;
+        }
+        delete currentNode;
+        size--;
+        return;
+      }
+      lastNode = currentNode;
+      currentNode = currentNode->next;
+    }
+    throw std::out_of_range("item was not found in list!");
   }
 
   /// @brief Remove the first instance of item from the list. O(N) operation.
