@@ -3,20 +3,15 @@
 #include "nll/collections/hashmap.hpp"
 
 namespace nll {
-    
+
 class Set {
-private:
-    Hashmap hashmap;
-    
-public:
-    void Add(std::string key) {
-        hashmap[key] = "exists";
-    }
+ private:
+  Hashmap<std::string, std::string> hashmap;
 
-    bool Contains(std::string key) {
-        return hashmap[key] == "exists";
-    }
+ public:
+  void Add(std::string key) { hashmap[key] = "exists"; }
 
+  bool Contains(std::string key) { return hashmap[key] == "exists"; }
 };
 
-}
+}  // namespace nll
