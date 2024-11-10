@@ -9,7 +9,7 @@
 
 class BaseHashmapTest : public testing::Test {
  protected:
-  nll::Hashmap map;
+  nll::Hashmap<std::string, std::string> map;
 };
 
 TEST_F(BaseHashmapTest, InsertSucceeds) {
@@ -19,6 +19,17 @@ TEST_F(BaseHashmapTest, InsertSucceeds) {
 TEST_F(BaseHashmapTest, GetSucceeds) {
   map.Insert("Hello", "World");
   ASSERT_EQ(map.Get("Hello"), "World");
+}
+
+TEST_F(BaseHashmapTest, RemoveSucceeds) {
+  map.Insert("Hello", "World");
+  ASSERT_NO_FATAL_FAILURE(map.Remove("Hello"));
+}
+
+TEST_F(BaseHashmapTest, RemovedElementIsNoLongerContained) {
+  map.Insert("Hello", "World");
+  map.Remove("Hello");
+  ASSERT_FALSE(map.Contains("Hello"));
 }
 
 TEST_F(BaseHashmapTest, MultipleInsertsSucceed) {
@@ -55,7 +66,7 @@ TEST_F(BaseHashmapTest, NonexistentKeyThrows) {
 }
 
 TEST_F(BaseHashmapTest, IndexOperatorSetSucceeds) {
-    ASSERT_NO_FATAL_FAILURE(map["Hello"] = "World");
+  ASSERT_NO_FATAL_FAILURE(map["Hello"] = "World");
 }
 
 TEST_F(BaseHashmapTest, IndexOperatorGetSucceeds) {
