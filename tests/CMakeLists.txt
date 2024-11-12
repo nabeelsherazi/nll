@@ -23,6 +23,7 @@ add_executable(
   collections/test_hashmap.cpp
   collections/test_set.cpp
   graph/test_binary_tree.cpp
+  graph/test_unweighted_graph.cpp
 )
 target_link_libraries(
   nll_tests
