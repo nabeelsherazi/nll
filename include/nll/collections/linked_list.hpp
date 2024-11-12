@@ -267,5 +267,29 @@ class SinglyLinkedList {
     }
     throw std::out_of_range("item was not found in list!");
   };
+
+  void Reverse() {
+    if (!head) {
+      return;
+    }
+    // Current head will be the new tail
+    tail = head;
+
+    ListNode* previous_node = nullptr;
+    ListNode* next_node = nullptr;
+    // Use head as the current node
+    while (head) {
+      // Store next node
+      next_node = head->next;
+      // Current node's next becomes previous node
+      head->next = previous_node;
+      // Previous node is now current node
+      previous_node = head;
+      // Go to next node
+      head = next_node;
+    }
+    // Finally, new head is previous node
+    head = previous_node;
+  }
 };
 }  // namespace nll

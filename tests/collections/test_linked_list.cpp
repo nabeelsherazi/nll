@@ -219,3 +219,13 @@ TEST(MiscSinglyLinkedListTest, WorksWithFreakyTypes) {
   auto list = nll::SinglyLinkedList<std::pair<std::string, std::string>>();
   list.PushBack(std::make_pair("Hello", "World"));
 }
+
+TEST_F(BaseSinglyLinkedListTest, ReverseSucceeds) {
+  for (int i = 0; i < 5; i++) {
+    list.PushBack(i);
+  }
+  list.Reverse();
+  for (int i = 0; i < 5; i++) {
+    ASSERT_EQ(list[i], 5 - 1 - i);
+  }
+}
